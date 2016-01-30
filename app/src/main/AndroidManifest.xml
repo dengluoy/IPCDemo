@@ -22,6 +22,9 @@
         <activity
             android:name=".ThreeActivity"
             android:process="com.david.three" />
+
+        <service android:name=".service.ManagerService"
+            android:process=":remote"/>
     </application>
 
 </manifest>
