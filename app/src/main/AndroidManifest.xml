@@ -25,6 +25,8 @@
 
         <service android:name=".service.ManagerService"
             android:process=":remote"/>
+        <service android:name=".service.AIDLManagerService"
+            android:process=":aidl_mananger"/>
     </application>
 
 </manifest>

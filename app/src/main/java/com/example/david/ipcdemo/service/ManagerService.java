@@ -11,7 +11,6 @@ import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
 
-import com.example.david.ipcdemo.IBookManager;
 import com.example.david.ipcdemo.MyConstants;
 
 /**
@@ -21,6 +20,9 @@ import com.example.david.ipcdemo.MyConstants;
  * @describe
  */
 public class ManagerService extends Service {
+
+    public final String TAG = getClass().getSimpleName();
+
     private int i = 0;
     private Messenger messenger = new Messenger(new ManagerServiceHandler());
 

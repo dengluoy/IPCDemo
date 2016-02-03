@@ -18,6 +18,7 @@ import com.example.david.ipcdemo.service.ManagerService;
 
 public class MainActivity extends AppCompatActivity {
 
+
     private IBinder.DeathRecipient mDeathRecipient = new IBinder.DeathRecipient() {
         @Override
         public void binderDied() {
