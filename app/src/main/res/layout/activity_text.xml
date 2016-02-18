@@ -11,10 +11,15 @@
         android:layout_height="wrap_content" />
 
 
-    <TextView
-        android:id="@+id/content_button_tv"
-        style="@style/ContentText"
+    <Button
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:text="添加书籍" />
+        android:onClick="onAIDLManager"
+        android:text="StartAIDLManager" />
+
+    <TextView
+        android:id="@+id/book_list_name"
+        style="@style/ContentText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </LinearLayout>

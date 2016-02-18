@@ -16,12 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".TwoActivity"
-            android:process="com.david.two" />
-        <activity
-            android:name=".ThreeActivity"
-            android:process="com.david.three" />
+        <activity android:name=".TwoActivity" />
+        <activity android:name=".ThreeActivity" />
 
         <service android:name=".service.ManagerService"
             android:process=":remote"/>

@@ -4,12 +4,14 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
+import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.example.david.ipcdemo.Book;
 import com.example.david.ipcdemo.IBookManager;
+import com.example.david.ipcdemo.IOnNewBookListener;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -21,9 +23,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class AIDLManagerService extends Service {
 
-    public final String TAG = getClass().getSimpleName();
+    private final String TAG = getClass().getSimpleName();
+
+    public static final int MESSAGE_NEW_BOOK_ARRIVED = 1 << 3;
 
     private CopyOnWriteArrayList<Book> mBooks = new CopyOnWriteArrayList<>();
+    private RemoteCallbackList<IOnNewBookListener> mOnNewBookListeners = new RemoteCallbackList<>();
 
     private Binder mBinder = new IBookManager.Stub() {
         @Override
@@ -31,14 +36,35 @@ public class AIDLManagerService extends Service {
             return mBooks;
         }
 
-        @Override
-        public void addBook(@Nullable Book book) throws RemoteException {
+        public void addBook(Book book) throws RemoteException {
             mBooks.add(book);
             Log.d(TAG, Thread.currentThread().getName());
-//            Toast.makeText(AIDLManagerService.this, book.getBookName(), Toast.LENGTH_SHORT).show();
             Log.d(TAG, "addBook");
+            onNewBookBroacast(book);
+        }
+
+        @Override
+        public void registerOnNewBookListener(IOnNewBookListener onNewBookListener) throws RemoteException {
+            mOnNewBookListeners.register(onNewBookListener);
+                Log.d(TAG, "unRegisterOnNewBookListener");
+        }
+
+        @Override
+        public void unRegisterOnNewBookListener(IOnNewBookListener onNewBookListener) throws RemoteException {
+            mOnNewBookListeners.unregister(onNewBookListener);
+            Log.d(TAG, "unRegisterOnNewBookListener");
         }
     };
+
+    public void onNewBookBroacast(Book book) throws RemoteException {
+
+        int size = mOnNewBookListeners.beginBroadcast();
+        for(int i = 0; i < size; i++) {
+            IOnNewBookListener iOnNewBookListener = mOnNewBookListeners.getBroadcastItem(i);
+            iOnNewBookListener.onNewBook(book);
+        }
+        mOnNewBookListeners.finishBroadcast();
+    }
 
     @Override
     public void onCreate() {
