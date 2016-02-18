@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.david.ipcdemo">
 
+    <permission
+        android:name="com.david.permission.ACCESS_BOOK_SERVICE"
+        android:protectionLevel="normal" />
+    <uses-permission android:name="com.david.permission.ACCESS_BOOK_SERVICE" />
     <application
         android:name=".DavidApplication"
         android:allowBackup="true"
@@ -19,10 +23,13 @@
         <activity android:name=".TwoActivity" />
         <activity android:name=".ThreeActivity" />
 
-        <service android:name=".service.ManagerService"
-            android:process=":remote"/>
-        <service android:name=".service.AIDLManagerService"
-            android:process=":aidl_mananger"/>
+        <service
+            android:name=".service.ManagerService"
+            android:process=":remote" />
+        <service
+            android:name=".service.AIDLManagerService"
+            android:process=":aidl_mananger" />
     </application>
+
 
 </manifest>

@@ -2,8 +2,10 @@ package com.example.david.ipcdemo.service;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Binder;
 import android.os.IBinder;
+import android.os.Parcel;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
@@ -54,6 +56,11 @@ public class AIDLManagerService extends Service {
             mOnNewBookListeners.unregister(onNewBookListener);
             Log.d(TAG, "unRegisterOnNewBookListener");
         }
+
+        @Override
+        public boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
+            return super.onTransact(code, data, reply, flags);
+        }
     };
 
     public void onNewBookBroacast(Book book) throws RemoteException {
@@ -79,6 +86,12 @@ public class AIDLManagerService extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
+
+        int check = checkCallingOrSelfPermission("com.david.permission.ACCESS_BOOK_SERVICE");
+        if(check == PackageManager.PERMISSION_DENIED) {
+            return null;
+        }
         return mBinder;
     }
+
 }
