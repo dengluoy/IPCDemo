@@ -6,6 +6,9 @@
         android:name="com.david.permission.ACCESS_BOOK_SERVICE"
         android:protectionLevel="normal" />
     <uses-permission android:name="com.david.permission.ACCESS_BOOK_SERVICE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
     <application
         android:name=".DavidApplication"
         android:allowBackup="true"
@@ -22,6 +25,10 @@
         </activity>
         <activity android:name=".TwoActivity" />
         <activity android:name=".ThreeActivity" />
+        <activity android:name=".SocketActivity"/>
+
+        <service android:name=".service.TCPServerService"
+            android:process=":socket_tcp_server"/>
 
         <service
             android:name=".service.ManagerService"
@@ -30,6 +37,5 @@
             android:name=".service.AIDLManagerService"
             android:process=":aidl_mananger" />
     </application>
-
 
 </manifest>

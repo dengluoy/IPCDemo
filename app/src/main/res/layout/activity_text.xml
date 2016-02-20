@@ -4,18 +4,18 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
+    <Button
         android:id="@+id/content_name_tv"
         style="@style/ContentText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
+        android:layout_width="match_parent"
+        android:layout_height="150dp" />
 
     <Button
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:onClick="onAIDLManager"
-        android:text="StartAIDLManager" />
+        android:text="Start_AIDL_Manager" />
 
     <TextView
         android:id="@+id/book_list_name"

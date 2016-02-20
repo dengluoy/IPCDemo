@@ -11,6 +11,7 @@ import android.os.Message;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,8 +30,9 @@ public class ThreeActivity extends Activity {
     public final String TAG = getClass().getSimpleName();
 
 
-    private TextView mContentTv;
+    private Button mContentBt;
     private TextView mBookListNameTv;
+    private boolean isBindService;
 
     private IBookManager iBookManager;
     private android.os.Handler mHandler = new android.os.Handler() {
@@ -52,14 +54,15 @@ public class ThreeActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_text);
-        mContentTv = (TextView) findViewById(R.id.content_name_tv);
+        mContentBt = (Button) findViewById(R.id.content_name_tv);
         mBookListNameTv = (TextView) findViewById(R.id.book_list_name);
-        mContentTv.setText(TAG);
+        mContentBt.setText(TAG);
 
-        mContentTv.setOnClickListener(new View.OnClickListener() {
+        mContentBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(ThreeActivity.this, "ThreeAcitvity.End Point", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(ThreeActivity.this, SocketActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -67,6 +70,7 @@ public class ThreeActivity extends Activity {
     public void onAIDLManager(View view) {
         Intent intent = new Intent(this, AIDLManagerService.class);
         bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+        isBindService = true;
     }
 
     ServiceConnection serviceConnection = new ServiceConnection() {
@@ -92,15 +96,16 @@ public class ThreeActivity extends Activity {
 
     @Override
     protected void onDestroy() {
-        if(iBookManager != null && iBookManager.asBinder().isBinderAlive()) {
-            try {
-                iBookManager.unRegisterOnNewBookListener(onNewBookListener);
-            } catch (RemoteException e) {
-                e.printStackTrace();
+        if(isBindService) {
+            if(iBookManager != null && iBookManager.asBinder().isBinderAlive()) {
+                try {
+                    iBookManager.unRegisterOnNewBookListener(onNewBookListener);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
             }
+            unbindService(serviceConnection);
         }
-
-        unbindService(serviceConnection);
         super.onDestroy();
     }
 

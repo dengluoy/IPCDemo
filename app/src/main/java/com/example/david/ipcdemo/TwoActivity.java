@@ -12,6 +12,7 @@ import android.os.Message;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +29,7 @@ import java.util.List;
 public class TwoActivity extends Activity {
 
     public final String TAG = getClass().getSimpleName();
+    private boolean isBindServer;
     private IBinder.DeathRecipient deathRecipient = new IBinder.DeathRecipient() {
         @Override
         public void binderDied() {
@@ -38,7 +40,7 @@ public class TwoActivity extends Activity {
         }
     };
 
-    private TextView mContentTv;
+    private Button mContentBt;
     private TextView mBookListNameTv;
 
     private IBookManager mIBookManager;
@@ -63,12 +65,11 @@ public class TwoActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_text);
-        mContentTv = (TextView) findViewById(R.id.content_name_tv);
-        mContentTv.setText(TAG);
+        mContentBt = (Button) findViewById(R.id.content_name_tv);
+        mContentBt.setText(TAG);
         mBookListNameTv = (TextView) findViewById(R.id.book_list_name);
-        mContentTv.setText(TAG);
 
-        mContentTv.setOnClickListener(new View.OnClickListener() {
+        mContentBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TwoActivity.this, ThreeActivity.class);
@@ -81,6 +82,7 @@ public class TwoActivity extends Activity {
     public void onAIDLManager(View view) {
         Intent intent = new Intent(this, AIDLManagerService.class);
         bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+        isBindServer = true;
     }
 
 
@@ -143,8 +145,9 @@ public class TwoActivity extends Activity {
                 e.printStackTrace();
             }
         }
-
-        unbindService(serviceConnection);
+        if(isBindServer) {
+            unbindService(serviceConnection);
+        }
         super.onDestroy();
     }
 
